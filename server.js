@@ -42,6 +42,30 @@ app.get("/api/workouts", (req, res) => {
   });
 });
 
+/*
+app.put("/api/workouts/:id", (req, res) => {
+  something here like db.workout.blahblah({}, (req, req) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data);
+    }
+  });
+});
+*/
+
+/* 
+app.post("/api/workouts", (req, res) => {
+  db.Workout.create({}, (error, data) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data);
+    }
+  });
+});
+*/
+
 app.get("/api/workouts/range", (req, res) => {
   db.Workout.find({}, (err, data) => {
     if (error) {
