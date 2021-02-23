@@ -1,4 +1,5 @@
 const express = require("express");
+const mongojs = require("mongojs");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -32,31 +33,20 @@ app.get("/exercise", function(req, res) {
 });
 
 //API Routes
+// Get last workout info on index.html
 app.get("/api/workouts", (req, res) => {
   db.Workout.find({}, (error, data) => {
     if (error) {
       res.send(error);
     } else {
-      res.send(data);
+      res.json(data);
     }
   });
 });
 
-/*
-app.put("/api/workouts/:id", (req, res) => {
-  something here like db.workout.blahblah({}, (req, req) => {
-    if (error) {
-      res.send(error);
-    } else {
-      res.send(data);
-    }
-  });
-});
-*/
-
-/* 
+// Create new exercise/workout entry on exercise.html
 app.post("/api/workouts", (req, res) => {
-  db.Workout.create({}, (error, data) => {
+  db.Workout.create(req.body, (error, data) => {
     if (error) {
       res.send(error);
     } else {
@@ -64,15 +54,47 @@ app.post("/api/workouts", (req, res) => {
     }
   });
 });
-*/
+
+// Add exercise to existing workout on /exercise.html
+app.put("/api/workouts/:id", (req, res) => {
+  db.Workout.updateOne(
+    {
+      _id: mongojs.ObjectId(req.params.id)
+    },
+    {
+      $push: { 
+        exercises: req.body
+      }
+    },
+    (error, data) => {
+      if (error) {
+        res.send(error);
+      } else {
+        res.json(data);
+      }
+    }
+  );
+});
+
+
+// View stats
+// app.get("/api/workouts/range", (req, res) => {
+//   db.Workout.find({}, (err, data) => {
+//     if (error) {
+//       res.send(error);
+//     } else {
+//       res.json(data);
+//     }
+//   });
+// });
 
 app.get("/api/workouts/range", (req, res) => {
-  db.Workout.find({}, (err, data) => {
-    if (error) {
-      res.send(error);
-    } else {
-      res.send(data);
-    }
+  db.Workout.find({})
+  .then(dbWorkout => {
+    res.json(dbWorkout);
+  })
+  .catch(err => {
+    res.json(err);
   });
 });
 
