@@ -11,7 +11,7 @@ This is a coding bootcamp homework assignment to create a workout tracker.  This
 * [License](#License)
 
 ## Usage
-The [Workout Tracker!](https://vast-castle-24875.herokuapp.com/) application runs in the browser.
+The [Workout Tracker](https://vast-castle-24875.herokuapp.com/) application runs in the browser.
 
 Enter a new workout or continue the most recent workout.  The app will display your most recent workout data.  A dashboard displays workout totals for the past 7 workouts
 
