@@ -1,5 +1,4 @@
-# Bootcamp Homework 17 - NoSQL: Workout TrackerEat-Da-Burger!
-
+# Bootcamp Homework 17 - NoSQL: Workout Tracker
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Description
 This is a coding bootcamp homework assignment to create a workout tracker.  This assignment required the creation of a Mongo database with a Mongoose schema and routes handling with Express - the front end code was provided.  
