@@ -41,7 +41,14 @@ app.get("/exercise", function(req, res) {
 //API Routes
 // Get last workout info on index.html
 app.get("/api/workouts", (req, res) => {
-  db.Workout.find({}, (error, data) => {
+  db.Workout.aggregate( [
+    { 
+      $addFields: {
+        totalDuration: { $sum: "$exercises.duration"}
+      }
+    }
+  ], (error, data) => {
+    console.log();
     if (error) {
       res.send(error);
     } else {
@@ -49,58 +56,6 @@ app.get("/api/workouts", (req, res) => {
     }
   });
 });
-
-/*Below is a collection of my (sad) attempts to try to use 
-$addFields and $sum... */
-// app.get("/api/workouts", (req, res) => {
-//   db.Workout.aggregate( [
-//     {
-//       $addFields: {
-//         totalDuration: { $sum: "$exercises.duration"}
-//       }
-//     }
-//   ]).sort({"_id": -1}).limit(1, (error, data) => {
-//     console.log(data);
-//     if (error) {
-//       res.send(error);
-//     } else {
-//       res.json(data);
-//     }
-//   });
-// });
-
-// app.get("/api/workouts", (req, res) => {
-//   db.Workout.aggregate([
-//     { $match: { _id: req.params.query}},
-//     { $addFields: {
-//       totalDuration: { $sum: "$exercises.duration"}
-//     }}
-//   ], (error, data) => {
-//     if (error) {
-//       res.send(error);
-//     } else {
-//       console.log(data);
-//       res.json(data);
-//     }
-//   });
-// });
-
-// app.get("/api/workouts", (req, res) => {
-//   db.Workout.find({}).sort({"_id": -1}).limit(1).aggregate( [
-//     {
-//       $addFields: {
-//         totalDuration: { $sum: "$exercises.duration"}
-//       }
-//     }
-//   ], (error, data) => {
-//     console.log(data);
-//     if (error) {
-//       res.send(error);
-//     } else {
-//       res.json(data);
-//     }
-//   });
-// });
 
 // Create new exercise/workout entry on exercise.html
 app.post("/api/workouts", (req, res) => {
@@ -136,14 +91,21 @@ app.put("/api/workouts/:id", (req, res) => {
 
 // View stats
 app.get("/api/workouts/range", (req, res) => {
-  db.Workout.find({}).limit(7)
+  db.Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: { $sum: "$exercises.duration"}
+      }
+    }
+  ]).limit(7)
   .then(dbWorkout => {
     res.json(dbWorkout);
   })
   .catch(err => {
     res.json(err);
   });
-});
+}); 
+
 
 app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);
